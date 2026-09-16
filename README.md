@@ -1,122 +1,101 @@
-# 🩸 Hijama Sunnah Center — Streamlit App
+# 🩸 Hijama Wellness Center — Appointment System
 
-An app for a Hijama (cupping therapy) center: Sunnah-based Hijri calendar
-with recommended treatment days, hadith about Hijama, general condition
-information, a Gemini-powered assistant that matches patients with a male
-or female practitioner, and a booking/contact page.
+A mobile-friendly Streamlit Hijama appointment application with:
+- Client appointment form
+- Automatic practitioner selection by gender
+- Persistent Google Sheets booking storage
+- Admin appointment dashboard
+- Booking status management
+- Gemini educational information assistant
+- Gemini-generated short poster tagline
+- Optional Gradio frontend using the same backend
 
-- **Center:** Hijama Sunnah Center
-- **Address:** Chaknore Tablighi Markaz, Jalalabad, Afghanistan
-- **Phone:** 0787960263
+## Center details
 
-## Features
+- Male practitioner: Muhammad Isreal
+- Female practitioner: Shamim Akhtar
+- Contact: 0787960263
+- Additional contact: 0784607516
+- Address: Chaknore Tablighi Markaz, Jalalabad, Afghanistan
 
-- 📅 Hijri calendar (pure Python, no external calendar package) highlighting
-  the 17th, 19th and 21st of each lunar month — the days mentioned in
-  hadith as best for Hijama
-- 📖 Hadith about Hijama (summarized, with sources)
-- 🩺 General condition/symptom reference (educational only, not a diagnosis)
-- 🤖 Gemini-powered chat assistant that routes male patients to the male
-  practitioner and female patients to the female practitioner
-- 📍 Contact and Google Maps link, plus a simple booking form
+## 1. GitHub files
 
-## Add your logo
+Upload these files to your GitHub repository:
 
-Drop your center's logo/photo into `assets/logo.png` and, if you want it
-shown in the app, add this near the top of `app.py`:
+- app.py
+- backend.py
+- gradio_app.py
+- requirements.txt
+- .gitignore
+- README.md
 
-```python
-st.image("assets/logo.png", width=120)
-```
+Do NOT upload `.streamlit/secrets.toml`.
 
-## Run locally
+## 2. Configure Google Sheets persistence
 
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-```
+The app first tries Google Sheets. If Google credentials are not configured, it falls back to a temporary local JSON file for development.
 
-The app will open at `http://localhost:8501`.
+For Streamlit Community Cloud, use Google Sheets so appointment requests are persistent.
 
-## Gemini API key
+High-level steps:
+1. Create a Google Cloud project.
+2. Create a service account.
+3. Enable Google Sheets API and Google Drive API.
+4. Create a Google Sheet named `Hijama Appointment Requests`.
+5. Share that Sheet with the service account's `client_email` as Editor.
+6. Put the service-account fields in Streamlit Secrets under `[gcp_service_account]`.
 
-Get a free key at <https://aistudio.google.com/app/apikey>.
+## 3. Configure Gemini
 
-The app looks for the key in Streamlit's **secrets** first. If none is
-configured, it falls back to letting a visitor paste their own key for
-just that session.
+Create a Gemini API key and add it to Streamlit Secrets:
 
-**Run locally with your own key:**
+GEMINI_API_KEY = "your-key"
 
-```bash
-cp .streamlit/secrets.toml.example .streamlit/secrets.toml
-# then edit .streamlit/secrets.toml and paste your real key in
-streamlit run app.py
-```
+The model is configurable:
 
-`.streamlit/secrets.toml` is already in `.gitignore`, so your real key
-never gets committed or pushed to GitHub.
+GEMINI_MODEL = "gemini-2.5-flash"
 
-**Deploy on Streamlit Community Cloud with one shared key for everyone:**
+If Google changes model availability for your account, change this value in Secrets without changing the application code.
 
-1. Deploy the app first (see below).
-2. In the Streamlit Cloud dashboard, open your app → **Settings → Secrets**.
-3. Paste:
-   ```toml
-   GEMINI_API_KEY = "your-key-here"
-   ```
-4. Save — the app restarts automatically and the assistant page will show
-   "✅ Assistant is ready" for every visitor, with no key prompt.
+## 4. Streamlit Secrets
 
-## Deploy to GitHub + Streamlit Community Cloud
+In Streamlit Community Cloud:
+Manage app → Settings → Secrets
 
-1. **Create a GitHub repo** and push this folder:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: Hijama Sunnah Center app"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<your-repo>.git
-   git push -u origin main
-   ```
+Paste the contents of your local `secrets.toml` (with your real values).
 
-2. **Deploy on Streamlit Cloud**:
-   - Go to <https://share.streamlit.io>
-   - Sign in with GitHub
-   - Click **"New app"**
-   - Select your repository, branch `main`, and main file `app.py`
-   - Click **Deploy**
+Never commit the real secrets file to GitHub.
 
-3. Your app will be live at a URL like:
-   `https://<your-app-name>.streamlit.app`
+## 5. Deploy
 
-4. (Optional) Add the `GEMINI_API_KEY` secret as described above so
-   visitors don't need their own key.
+Streamlit Community Cloud:
+1. Push the repository to GitHub.
+2. Create App.
+3. Select the repository and branch.
+4. Main file: `app.py`.
+5. Add the Secrets.
+6. Deploy.
 
-## Project structure
+## 6. Admin
 
-```
-hujama_app/
-├── app.py              # Main Streamlit app
-├── hijri.py            # Pure-Python Gregorian↔Hijri conversion
-├── requirements.txt
-├── README.md
-├── .gitignore
-├── .streamlit/
-│   └── config.toml     # App theme
-└── assets/
-    └── (place your logo/photos here)
-```
+Open the deployed app → `🔐 Admin Requests` → enter your ADMIN_PASSWORD.
 
-## Notes
+Every submitted request gets a unique ID such as `HJ-AB12CD34`.
 
-- The Hijri calendar here is a **tabular (arithmetic) approximation**.
-  It can differ by a day from local moonsighting announcements — use the
-  "Moonsighting adjustment" slider in the sidebar to correct it for your
-  region if needed.
-- The address shown links to a Google Maps **search** for "Chaknore
-  Tablighi Markaz, Jalalabad, Afghanistan" rather than a fixed pin, since
-  no exact coordinates were provided. Swap in exact coordinates in
-  `app.py` (`MAPS_URL`) if you have them.
-- All medical/condition content is educational only and clearly marked
-  as not a substitute for a qualified practitioner's assessment.
+## 7. Optional Gradio app
+
+Install dependencies and run:
+
+python gradio_app.py
+
+The Gradio interface uses the same `backend.py`.
+
+For production, use the Streamlit application as the main public app and keep Gradio as an optional testing/secondary frontend.
+
+## Medical safety
+
+The Gemini assistant is deliberately configured for educational information. It should not diagnose conditions, prescribe medicines, or promise that Hijama cures a disease. Appointment booking does not replace professional medical evaluation.
+
+## Important persistence note
+
+Streamlit Community Cloud instances are not a suitable place to treat a local file as permanent appointment storage. Configure Google Sheets (or another hosted database) for real client bookings.
