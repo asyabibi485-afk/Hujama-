@@ -426,8 +426,8 @@ elif page == "📍 Book / Contact":
             unsafe_allow_html=True,
         )
         st.markdown("#### Practitioners")
-        st.markdown("- 👨‍⚕️ **Dr. Ahmad** — treats male patients")
-        st.markdown("- 👩‍⚕️ **Dr. Fatima** — treats female patients")
+        st.markdown("- 👨‍⚕️ **Muhammd. isreal** — treats male patients")
+        st.markdown("- 👩‍⚕️ **Shamim Akhtar** — treats female patients")
 
     with col2:
         st.markdown("#### Request a booking")
@@ -443,7 +443,7 @@ elif page == "📍 Book / Contact":
                 if not name or not phone:
                     st.error("Please provide your name and phone number.")
                 else:
-                    practitioner = "Dr. Ahmad (male practitioner)" if gender == "Male" else "Dr. Fatima (female practitioner)"
+                    practitioner = "Muhammad. isreal(male practitioner)" if gender == "Male" else "Shamim Akhtar (female practitioner)"
                     st.success("Booking request prepared. Please call or message the number below to confirm your appointment.")
                     st.markdown(
                         f"""
