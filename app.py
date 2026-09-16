@@ -6,6 +6,7 @@ from backend import (
     update_booking_status,
     get_ai_response,
     get_poster_copy,
+    get_upcoming_hijama_dates,
     CONFIG,
 )
 
@@ -41,6 +42,9 @@ st.markdown("""
 }
 .poster h2 { font-size:2rem; margin-bottom:5px; }
 .poster .phone { font-size:1.2rem; font-weight:700; }
+.hadith-card { background:#171820; border:1px solid #6f3151; border-radius:20px; padding:24px; margin-top:18px; }
+.hijri-date { background:#21141b; border:1px solid #5d3447; border-radius:14px; padding:14px; margin-bottom:10px; }
+.warning { background:#2a2416; border:1px solid #665525; border-radius:14px; padding:14px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -71,6 +75,53 @@ def render_poster():
       <p class="phone">📞 {CONFIG['phone1']} &nbsp; {CONFIG['phone2']}</p>
     </div>
     """, unsafe_allow_html=True)
+
+def islamic_calendar():
+    st.subheader("🕌 Islamic Hijama Calendar")
+    st.write("The commonly cited Sunnah dates for cupping are the **17th, 19th and 21st of the Hijri month**. Local moon-sighting can shift the Gregorian date by about one day, so confirm the Hijri date locally before booking.")
+
+    dates = get_upcoming_hijama_dates(12)
+    if dates:
+        for row in dates[:12]:
+            st.markdown(
+                f'<div class="hijri-date"><b>🌙 {row["hijri_date"]}</b><br>Gregorian: {row["gregorian_date"]}</div>',
+                unsafe_allow_html=True,
+            )
+    else:
+        st.info("Hijri date conversion is unavailable. Please install the hijridate package.")
+
+    st.markdown("### 🩺 Symptoms & health concerns")
+    st.write("People commonly ask about Hijama for headaches, muscle or neck/back discomfort, and general wellbeing. These are **not promises of cure**. Medical evidence for cupping varies by condition, and Hijama should not replace diagnosis or treatment from a qualified clinician.")
+    st.markdown("""
+    - Headache or tension-type pain
+    - Neck, shoulder or back muscle discomfort
+    - General relaxation/wellness requests
+    - Questions about traditional Islamic healing practices
+    """)
+    st.markdown('<div class="warning"><b>Important:</b> Seek urgent medical care for chest pain, severe breathing difficulty, fainting, major bleeding, stroke symptoms, severe infection, or other emergency symptoms. Tell the practitioner about medicines, pregnancy, bleeding disorders, anemia, diabetes, or other important medical conditions before Hijama.</div>', unsafe_allow_html=True)
+
+
+def islamic_poster():
+    st.subheader("🕌 Islamic Hijama Poster")
+    st.markdown("""
+    <div class="poster">
+      <div style="font-size:3rem">🌙 🩸</div>
+      <h2>HIJAMA • الحجامة</h2>
+      <p style="font-size:1.15rem"><b>17 • 19 • 21</b> of the Hijri month</p>
+      <div class="hadith-card">
+        <p style="font-size:1.2rem;line-height:1.7">“If anyone has himself cupped on the 17th, 19th and 21st it will be a remedy for every disease.”</p>
+        <p><b>— Sunan Abi Dawud 3861</b></p>
+        <p class="small">Reported from Abu Hurayrah رضي الله عنه. The hadith is graded Hasan by al-Albani on Sunnah.com.</p>
+      </div>
+      <hr style="border-color:rgba(255,255,255,.25)">
+      <p>Traditional Islamic wellness • Appointment required</p>
+      <p>👨 Muhammad Isreal — Male Practitioner</p>
+      <p>👩 Shamim Akhtar — Female Practitioner</p>
+      <p>📍 {address}</p>
+      <p class="phone">📞 {phone1} &nbsp; {phone2}</p>
+      <p style="font-size:.85rem">Hijama is complementary care and does not replace medical diagnosis or emergency treatment.</p>
+    </div>
+    """.format(address=CONFIG['address'], phone1=CONFIG['phone1'], phone2=CONFIG['phone2']), unsafe_allow_html=True)
 
 def booking_form():
     st.subheader("📅 Book an Appointment")
@@ -214,10 +265,13 @@ tab1, tab2, tab3, tab4 = st.tabs([
     "📅 Book Appointment",
     "🔐 Admin Requests",
     "🤖 AI Assistant",
+    "🕌 Islamic Calendar",
+    "🖼️ Islamic Poster",
 ])
 
 with tab1:
     render_poster()
+    st.info("🕌 Sunnah scheduling: commonly cited Hijama dates are the 17th, 19th and 21st of each Hijri month. See the Islamic Calendar tab for upcoming dates.")
     st.write("")
     c1, c2, c3 = st.columns(3)
     with c1:
@@ -235,6 +289,12 @@ with tab3:
 
 with tab4:
     ai_assistant()
+
+with tab5:
+    islamic_calendar()
+
+with tab6:
+    islamic_poster()
 
 st.divider()
 st.caption(

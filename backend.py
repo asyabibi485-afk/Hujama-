@@ -181,6 +181,60 @@ def update_booking_status(booking_id: str, status: str) -> None:
         raise ValueError("Booking not found.")
     _write_local(rows)
 
+
+
+# Islamic/Hijri calendar helpers
+def get_hijri_month_dates(year: int, month: int):
+    """Return Gregorian dates for Hijri 17th, 19th and 21st.
+
+    Uses hijridate's civil/tabular conversion. The displayed dates are
+    approximate because local moon-sighting can differ by a day.
+    """
+    try:
+        from hijridate import Hijri
+        results = []
+        for day in (17, 19, 21):
+            try:
+                g = Hijri(year, month, day).to_gregorian()
+                results.append((day, g))
+            except ValueError:
+                continue
+        return results
+    except Exception:
+        return []
+
+def get_upcoming_hijama_dates(months: int = 12):
+    """Return upcoming Hijri 17/19/21 dates starting around today."""
+    from datetime import date
+    try:
+        from hijridate import Gregorian
+        month_names = [
+            "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani",
+            "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
+            "Ramadan", "Shawwal", "Dhul-Qi'dah", "Dhul-Hijjah"
+        ]
+        today = date.today()
+        h = Gregorian(today.year, today.month, today.day).to_hijri()
+        rows = []
+        y, m = h.year, h.month
+        for _ in range(months):
+            for day, g in get_hijri_month_dates(y, m):
+                gd = date(g.year, g.month, g.day)
+                if gd >= today:
+                    rows.append({
+                        "hijri_date": f"{day} {month_names[m-1]} {y} AH",
+                        "gregorian_date": gd.isoformat(),
+                        "day": day,
+                    })
+            m += 1
+            if m == 13:
+                m = 1
+                y += 1
+        return sorted(rows, key=lambda x: x["gregorian_date"])
+    except Exception:
+        return []
+
+
 def get_ai_response(question: str) -> str:
     api_key = _secret("GEMINI_API_KEY", "")
     if not api_key:

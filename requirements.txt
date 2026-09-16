@@ -3,3 +3,5 @@ gspread>=6.2
 google-auth>=2.40
 google-genai>=1.30
 gradio>=6.0
+
+hijridate>=2.5.0
