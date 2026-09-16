@@ -147,80 +147,95 @@ tab_home, tab_calendar, tab_hadith, tab_conditions, tab_poster, tab_assistant, t
 # POSTER (illustrated SVG, print-ready)
 # ----------------------------------------------------------------------
 def build_poster_svg() -> str:
-    """A tasteful, illustrated (non-photographic) poster: a reclining patient
-    receiving cupping therapy, the Sunnah-recommended days, commonly treated
-    conditions, a hadith, and the center's contact details."""
+    """A tasteful, illustrated (non-photographic) cupping-therapy poster."""
     cups = [
-        (300, 430, 32), (400, 410, 28), (500, 430, 32),
-        (330, 520, 26), (470, 520, 26),
-        (260, 610, 24), (400, 630, 28), (540, 610, 24),
+        (300, 430, 34), (400, 410, 30), (500, 430, 34),
+        (330, 520, 28), (470, 520, 28),
+        (260, 610, 26), (400, 630, 30), (540, 610, 26),
     ]
     cup_svg = ""
     for cx, cy, r in cups:
-        cup_svg += (
-            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#e9c46a" opacity="0.85"/>'
-            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#0a4d42" stroke-width="3"/>'
-            f'<circle cx="{cx}" cy="{cy}" r="{r*0.45}" fill="#0f6b5c" opacity="0.55"/>'
-        )
+        cup_svg += f"""
+        <circle cx="{cx}" cy="{cy}" r="{r}" fill="#e9c46a" opacity="0.85"/>
+        <circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#0a4d42" stroke-width="3"/>
+        <circle cx="{cx}" cy="{cy}" r="{r*0.45}" fill="#0f6b5c" opacity="0.55"/>
+        """
 
-    conditions_line = "Migraine  •  Back Pain  •  Joint Pain  •  Fatigue  •  Sciatica  •  High BP*"
+    return f"""
+<svg viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a4d42"/>
+      <stop offset="100%" stop-color="#0f6b5c"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3e3cf"/>
+      <stop offset="100%" stop-color="#e7cfae"/>
+    </linearGradient>
+  </defs>
 
-    raw = f"""<svg viewBox="0 0 800 1600" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
-<defs>
-<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="#0a4d42"/>
-<stop offset="100%" stop-color="#0f6b5c"/>
-</linearGradient>
-<linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="#f3e3cf"/>
-<stop offset="100%" stop-color="#e7cfae"/>
-</linearGradient>
-</defs>
-<rect width="800" height="1600" fill="url(#bg)"/>
-<rect x="24" y="24" width="752" height="1552" fill="none" stroke="#e9c46a" stroke-width="3" rx="18"/>
-<text x="400" y="80" text-anchor="middle" font-size="26" fill="#e9c46a" font-family="'Amiri', serif" direction="rtl">الحجامة سنة نبوية</text>
-<text x="400" y="135" text-anchor="middle" font-size="46" fill="#ffffff" font-weight="bold">🩸 HIJAMA</text>
-<text x="400" y="171" text-anchor="middle" font-size="20" fill="#e9c46a" letter-spacing="2">SUNNAH CUPPING THERAPY</text>
-<text x="400" y="200" text-anchor="middle" font-size="15" fill="#cfe3dc" font-style="italic">A patient receiving Hijama (cupping) on the back</text>
-<g>
-<!-- legs (patient lying face-down) -->
-<rect x="300" y="780" width="85" height="280" rx="35" fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
-<rect x="415" y="780" width="85" height="280" rx="35" fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
-<ellipse cx="342" cy="1075" rx="38" ry="24" fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
-<ellipse cx="458" cy="1075" rx="38" ry="24" fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
-<!-- arms resting relaxed at the sides -->
-<rect x="165" y="410" width="55" height="170" rx="27" fill="url(#skin)" stroke="#c9a473" stroke-width="2" transform="rotate(18 192 495)"/>
-<rect x="155" y="555" width="50" height="140" rx="25" fill="url(#skin)" stroke="#c9a473" stroke-width="2" transform="rotate(-8 180 625)"/>
-<rect x="580" y="410" width="55" height="170" rx="27" fill="url(#skin)" stroke="#c9a473" stroke-width="2" transform="rotate(-18 608 495)"/>
-<rect x="595" y="555" width="50" height="140" rx="25" fill="url(#skin)" stroke="#c9a473" stroke-width="2" transform="rotate(8 620 625)"/>
-<!-- head -->
-<ellipse cx="400" cy="330" rx="55" ry="60" fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
-<!-- back / torso, where the cups are placed -->
-<path d="M230 460 Q220 380 290 350 Q340 320 400 320 Q460 320 510 350 Q580 380 570 460 L560 700 Q560 760 500 780 L300 780 Q240 760 240 700 Z" fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
-{cup_svg}
-</g>
-<g>
-<rect x="230" y="1130" width="340" height="56" rx="28" fill="#e9c46a"/>
-<text x="400" y="1166" text-anchor="middle" font-size="20" fill="#0a4d42" font-weight="bold">Best days: 17th, 19th &amp; 21st (Hijri)</text>
-</g>
-<text x="400" y="1235" text-anchor="middle" font-size="17" fill="#e9c46a" font-weight="bold">Commonly used for:</text>
-<text x="400" y="1265" text-anchor="middle" font-size="16" fill="#f4f7f6">{conditions_line}</text>
-<text x="400" y="1290" text-anchor="middle" font-size="12" fill="#cfe3dc" font-style="italic">*Educational only — not a diagnosis. Always consult the practitioner first.</text>
-<text x="400" y="1335" text-anchor="middle" font-size="15" fill="#e9c46a" font-weight="bold">Hadith</text>
-<text x="400" y="1365" text-anchor="middle" font-size="17" fill="#f4f7f6" font-style="italic">"If there were something excellent to be used as a remedy,</text>
-<text x="400" y="1390" text-anchor="middle" font-size="17" fill="#f4f7f6" font-style="italic">it would be cupping." — Sunan Abi Dawud / Ibn Majah</text>
-<line x1="120" y1="1420" x2="680" y2="1420" stroke="#e9c46a" stroke-width="1.5"/>
-<text x="400" y="1458" text-anchor="middle" font-size="24" fill="#ffffff" font-weight="bold">{CENTER_NAME}</text>
-<text x="400" y="1488" text-anchor="middle" font-size="17" fill="#e9c46a">📞 {CENTER_PHONE}</text>
-<text x="400" y="1514" text-anchor="middle" font-size="16" fill="#f4f7f6">{CENTER_ADDRESS}</text>
-<text x="400" y="1546" text-anchor="middle" font-size="14" fill="#cfe3dc">👨‍⚕️ Muhammad Isreal (male)&#160;&#160;&#160;&#160;👩‍⚕️ Shamim Akhtar (female)</text>
-</svg>"""
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect x="24" y="24" width="752" height="1152" fill="none" stroke="#e9c46a" stroke-width="3" rx="18"/>
 
-    # Collapse to a single line with no blank lines: Streamlit's markdown
-    # parser treats a blank line inside an HTML block as the end of that
-    # block, after which indented text gets rendered as a literal code
-    # block instead of as SVG. Keeping this on one line avoids that.
-    return " ".join(line.strip() for line in raw.splitlines() if line.strip())
+  <text x="400" y="105" text-anchor="middle" font-size="26" fill="#e9c46a"
+        font-family="'Amiri', serif" direction="rtl">الحجامة سنة نبوية</text>
+
+  <text x="400" y="160" text-anchor="middle" font-size="46" fill="#ffffff" font-weight="bold">
+    🩸 HIJAMA
+  </text>
+  <text x="400" y="196" text-anchor="middle" font-size="20" fill="#e9c46a" letter-spacing="2">
+    SUNNAH CUPPING THERAPY
+  </text>
+
+  <!-- Stylized back/torso illustration -->
+  <g>
+    <ellipse cx="400" cy="330" rx="55" ry="60" fill="url(#skin)"/>
+    <path d="M230 460
+             Q220 380 290 350
+             Q340 320 400 320
+             Q460 320 510 350
+             Q580 380 570 460
+             L560 700
+             Q560 760 500 780
+             L300 780
+             Q240 760 240 700
+             Z"
+          fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
+    {cup_svg}
+  </g>
+
+  <!-- Recommended-days badge -->
+  <g>
+    <rect x="230" y="850" width="340" height="56" rx="28" fill="#e9c46a"/>
+    <text x="400" y="886" text-anchor="middle" font-size="20" fill="#0a4d42" font-weight="bold">
+      Best days: 17th, 19th &amp; 21st (Hijri)
+    </text>
+  </g>
+
+  <text x="400" y="950" text-anchor="middle" font-size="17" fill="#f4f7f6" font-style="italic"
+        font-family="Georgia, serif">
+    "If there were something excellent to be used as a remedy,
+  </text>
+  <text x="400" y="975" text-anchor="middle" font-size="17" fill="#f4f7f6" font-style="italic">
+    it would be cupping." — Sunan Abi Dawud / Ibn Majah
+  </text>
+
+  <line x1="120" y1="1015" x2="680" y2="1015" stroke="#e9c46a" stroke-width="1.5"/>
+
+  <text x="400" y="1055" text-anchor="middle" font-size="24" fill="#ffffff" font-weight="bold">
+    {CENTER_NAME}
+  </text>
+  <text x="400" y="1085" text-anchor="middle" font-size="17" fill="#e9c46a">
+    📞 {CENTER_PHONE}
+  </text>
+  <text x="400" y="1112" text-anchor="middle" font-size="16" fill="#f4f7f6">
+    {CENTER_ADDRESS}
+  </text>
+  <text x="400" y="1145" text-anchor="middle" font-size="14" fill="#cfe3dc">
+    👨‍⚕️ Muhammad Isreal (male)   👩‍⚕️ Shamim Akhtar (female)
+  </text>
+</svg>
+"""
 
 
 with tab_home:
