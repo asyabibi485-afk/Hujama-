@@ -144,7 +144,7 @@ tab_home, tab_calendar, tab_hadith, tab_conditions, tab_poster, tab_assistant, t
 # HOME
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
-# POSTER (illustrated SVG, print-ready)
+#POSTER (illustrated SVG, print-ready)
 # ----------------------------------------------------------------------
 def build_poster_svg() -> str:
     """A tasteful, illustrated (non-photographic) cupping-therapy poster."""
@@ -155,42 +155,9 @@ def build_poster_svg() -> str:
     ]
     cup_svg = ""
     for cx, cy, r in cups:
-        cup_svg += f"""
-        <circle cx="{cx}" cy="{cy}" r="{r}" fill="#e9c46a" opacity="0.85"/>
-        <circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#0a4d42" stroke-width="3"/>
-        <circle cx="{cx}" cy="{cy}" r="{r*0.45}" fill="#0f6b5c" opacity="0.55"/>
-        """
+        cup_svg += f""" <circle cx="{cx}" cy="{cy}" r="{r}" fill="#e9c46a" opacity="0.85"/> <circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#0a4d42" stroke-width="3"/> <circle cx="{cx}" cy="{cy}" r="{r*0.45}" fill="#0f6b5c" opacity="0.55"/> """
 
-    return f"""
-<svg viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0a4d42"/>
-      <stop offset="100%" stop-color="#0f6b5c"/>
-    </linearGradient>
-    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#f3e3cf"/>
-      <stop offset="100%" stop-color="#e7cfae"/>
-    </linearGradient>
-  </defs>
-
-  <rect width="800" height="1200" fill="url(#bg)"/>
-  <rect x="24" y="24" width="752" height="1152" fill="none" stroke="#e9c46a" stroke-width="3" rx="18"/>
-
-  <text x="400" y="105" text-anchor="middle" font-size="26" fill="#e9c46a"
-        font-family="'Amiri', serif" direction="rtl">الحجامة سنة نبوية</text>
-
-  <text x="400" y="160" text-anchor="middle" font-size="46" fill="#ffffff" font-weight="bold">
-    🩸 HIJAMA
-  </text>
-  <text x="400" y="196" text-anchor="middle" font-size="20" fill="#e9c46a" letter-spacing="2">
-    SUNNAH CUPPING THERAPY
-  </text>
-
-  <!-- Stylized back/torso illustration -->
-  <g>
-    <ellipse cx="400" cy="330" rx="55" ry="60" fill="url(#skin)"/>
-    <path d="M230 460
+    return f""" <svg viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif"> <defs> <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"> <stop offset="0%" stop-color="#0a4d42"/> <stop offset="100%" stop-color="#0f6b5c"/> </linearGradient> <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"> <stop offset="0%" stop-color="#f3e3cf"/> <stop offset="100%" stop-color="#e7cfae"/> </linearGradient> </defs> <rect width="800" height="1200" fill="url(#bg)"/> <rect x="24" y="24" width="752" height="1152" fill="none" stroke="#e9c46a" stroke-width="3" rx="18"/> <text x="400" y="105" text-anchor="middle" font-size="26" fill="#e9c46a" font-family="'Amiri', serif" direction="rtl">الحجامة سنة نبوية</text> <text x="400" y="160" text-anchor="middle" font-size="46" fill="#ffffff" font-weight="bold"> 🩸 HIJAMA </text> <text x="400" y="196" text-anchor="middle" font-size="20" fill="#e9c46a" letter-spacing="2"> SUNNAH CUPPING THERAPY </text> <!-- Stylized back/torso illustration --> <g> <ellipse cx="400" cy="330" rx="55" ry="60" fill="url(#skin)"/> <path d="M230 460
              Q220 380 290 350
              Q340 320 400 320
              Q460 320 510 350
@@ -199,16 +166,12 @@ def build_poster_svg() -> str:
              Q560 760 500 780
              L300 780
              Q240 760 240 700
-             Z"
-          fill="url(#skin)" stroke="#c9a473" stroke-width="2"/>
-    {cup_svg}
-  </g>
+             Z" fill="url(#skin)" stroke="#c9a473" stroke-width="2"/> {cup_svg} </g> <!-- Recommended-days badge --> <g> <rect x="230" y="850" width="340" height="56" rx="28" fill="#e9c46a"/> <text x="400" y="886" text-anchor="middle" font-size="20" fill="#0a4d42" font-weight="bold"> Best days: 17th, 19th &amp; 21st (Hijri) </text> </g> <text x="400" y="950" text-anchor="middle" font-size="17" fill="#f4f7f6" font-style="italic" font-family="Georgia, serif"> "If there were something excellent to be used as a remedy,
+  </text>
+  <text x="400" y="975" text-anchor="middle" font-size="17" fill="#f4f7f6" font-style="italic">
+    it would be cupping." — Sunan Abi Dawud / Ibn Majah </text> <line x1="120" y1="1015" x2="680" y2="1015" stroke="#e9c46a" stroke-width="1.5"/> <text x="400" y="1055" text-anchor="middle" font-size="24" fill="#ffffff" font-weight="bold"> {CENTER_NAME} </text> <text x="400" y="1085" text-anchor="middle" font-size="17" fill="#e9c46a"> 📞 {CENTER_PHONE} </text> <text x="400" y="1112" text-anchor="middle" font-size="16" fill="#f4f7f6"> {CENTER_ADDRESS} </text> <text x="400" y="1145" text-anchor="middle" font-size="14" fill="#cfe3dc"> 👨‍⚕️ Muhammad Isreal (male) 👩‍⚕️ Shamim Akhtar (female) </text> </svg> """
 
-  <!-- Recommended-days badge -->
-  <g>
-    <rect x="230" y="850" width="340" height="56" rx="28" fill="#e9c46a"/>
-    <text x="400" y="886" text-anchor="middle" font-size="20" fill="#0a4d42" font-weight="bold">
-      Best days: 17th, 19th &amp; 21st (Hijri)
+&amp; 21st (Hijri)
     </text>
   </g>
 
