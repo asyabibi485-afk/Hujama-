@@ -361,7 +361,7 @@ elif page == "🤖 Ask the Assistant":
                 st.session_state["api_key"] = typed_key
 
     patient_gender = st.radio("I am seeking treatment as a:", ["Male patient", "Female patient"], horizontal=True)
-    doctor_label = "male practitioner, Dr. Ahmad" if patient_gender == "Male patient" else "female practitioner, Dr. Fatima"
+    doctor_label = "male practitioner, Muhammad Isreal" if patient_gender == "Male patient" else "female practitioner, Shamim Akhtar"
     st.caption(f"You'll be matched with our {doctor_label} for in-person treatment, in line with our center's practice of male practitioners treating male patients and female practitioners treating female patients.")
 
     if "chat_history" not in st.session_state:
