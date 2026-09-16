@@ -45,6 +45,24 @@ st.markdown("""
 .hadith-card { background:#171820; border:1px solid #6f3151; border-radius:20px; padding:24px; margin-top:18px; }
 .hijri-date { background:#21141b; border:1px solid #5d3447; border-radius:14px; padding:14px; margin-bottom:10px; }
 .warning { background:#2a2416; border:1px solid #665525; border-radius:14px; padding:14px; }
+/* Mobile-friendly tab navigation: swipe horizontally to reach every tab. */
+.stTabs [data-baseweb="tab-list"] {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px;
+    padding-bottom: 4px;
+}
+.stTabs [data-baseweb="tab"] {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+}
+@media (max-width: 700px) {
+    .block-container { padding-left: .75rem; padding-right: .75rem; }
+    .stTabs [data-baseweb="tab"] { font-size: .82rem; padding-left: .65rem; padding-right: .65rem; }
+    .hero { padding: 20px; }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -78,17 +96,30 @@ def render_poster():
 
 def islamic_calendar():
     st.subheader("🕌 Islamic Hijama Calendar")
-    st.write("The commonly cited Sunnah dates for cupping are the **17th, 19th and 21st of the Hijri month**. Local moon-sighting can shift the Gregorian date by about one day, so confirm the Hijri date locally before booking.")
+    st.write(
+        "The commonly cited Hijama dates in the hadith are the **17th, 19th and 21st of the Hijri month**. "
+        "The Gregorian dates below are calculated from the Hijri calendar; local moon-sighting can differ by about a day, so confirm locally before booking."
+    )
 
     dates = get_upcoming_hijama_dates(12)
     if dates:
-        for row in dates[:12]:
-            st.markdown(
-                f'<div class="hijri-date"><b>🌙 {row["hijri_date"]}</b><br>Gregorian: {row["gregorian_date"]}</div>',
-                unsafe_allow_html=True,
-            )
+        next_date = dates[0]
+        st.success(
+            f"🌙 **Next listed Hijama date:** {next_date['day']} — {next_date['hijri_date'].split(' ', 1)[1]} "
+            f"({next_date['gregorian_date']})"
+        )
+        cols = st.columns(3)
+        for i, row in enumerate(dates[:12]):
+            with cols[i % 3]:
+                st.markdown(
+                    f'<div class="hijri-date"><b>🌙 {row["day"]} {row["hijri_date"].split(" ", 1)[1]}</b><br>'
+                    f'📅 {row["gregorian_date"]}</div>',
+                    unsafe_allow_html=True,
+                )
+        st.caption("Showing the next 12 calculated 17th, 19th and 21st Hijri dates.")
+        st.link_button("📖 Read the hadith — Sunan Abi Dawud 3861", "https://sunnah.com/abudawud/29/7")
     else:
-        st.info("Hijri date conversion is unavailable. Please install the hijridate package.")
+        st.warning("Hijri date conversion is unavailable. Please install the hijridate package from requirements.txt.")
 
     st.markdown("### 🩺 Symptoms & health concerns")
     st.write("People commonly ask about Hijama for headaches, muscle or neck/back discomfort, and general wellbeing. These are **not promises of cure**. Medical evidence for cupping varies by condition, and Hijama should not replace diagnosis or treatment from a qualified clinician.")
@@ -260,13 +291,14 @@ def ai_assistant():
 
 render_hero()
 
+st.caption("📱 On a phone, swipe the tab bar left/right to reach all sections.")
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "🏠 Home",
-    "📅 Book Appointment",
-    "🔐 Admin Requests",
-    "🤖 AI Assistant",
+    "📅 Book",
+    "🔐 Admin",
+    "🤖 AI",
     "🕌 Islamic Calendar",
-    "🖼️ Islamic Poster",
+    "🖼️ Poster",
 ])
 
 with tab1:
