@@ -260,7 +260,7 @@ def ai_assistant():
 
 render_hero()
 
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "🏠 Home",
     "📅 Book Appointment",
     "🔐 Admin Requests",
