@@ -50,7 +50,20 @@ section[data-testid="stSidebar"] { background:#10141d; }
 .poster h2 { font-size:2rem; margin:.2rem 0; }
 .hadith-card { background:rgba(10,11,16,.42); border:1px solid rgba(255,255,255,.18); border-radius:20px; padding:22px; margin:18px 0; }
 .warning { background:#292316; border:1px solid #6c5a2c; border-radius:16px; padding:15px; }
-.stButton > button, .stDownloadButton > button { border-radius:12px; font-weight:700; }
+.stButton > button, .stDownloadButton > button { border-radius:12px; font-weight:700; background:#202735 !important; color:#ffffff !important; border:1px solid #3a4355 !important; text-shadow:none !important; opacity:1 !important; }
+.stButton > button:hover, .stDownloadButton > button:hover { background:#2b3445 !important; color:#ffffff !important; border-color:#c15b86 !important; }
+/* Keep selected/primary navigation buttons readable on light Streamlit themes. */
+.stButton > button[kind="primary"],
+.stButton > button[data-testid="baseButton-primary"],
+.stButton > button[data-testid="stBaseButton-primary"] { background:linear-gradient(135deg,#e35b7f,#b8446d) !important; color:#ffffff !important; border-color:#ef7394 !important; box-shadow:0 6px 18px rgba(193,91,134,.28) !important; }
+.stButton > button[kind="secondary"],
+.stButton > button[data-testid="baseButton-secondary"],
+.stButton > button[data-testid="stBaseButton-secondary"] { background:#202735 !important; color:#ffffff !important; border-color:#3a4355 !important; }
+.nav-scroll .stButton > button { color:#ffffff !important; background:#202735 !important; }
+.nav-scroll .stButton > button:hover { color:#ffffff !important; background:#2b3445 !important; }
+.bottom-nav .stButton > button { color:#ffffff !important; background:#202735 !important; }
+.admin-nav .stButton > button { color:#ffffff !important; background:#202735 !important; }
+
 .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"], .stDateInput input { border-radius:12px !important; }
 div[data-testid="stForm"] { border:1px solid var(--line); border-radius:22px; padding:20px; background:#131821; }
  .role-shell { background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:20px; padding:10px; margin:0 auto 16px; max-width:560px; }
